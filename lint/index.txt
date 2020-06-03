@@ -1,0 +1,175 @@
+1.eslint 安装
+npm install eslint -D
+
+2. 配置react项目：
+npm install babel-eslint eslint-plugin-react eslint-plugin-import  --D
+
+.eslintrc
+{
+    "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true
+  },
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "experimentalDecorators": true,
+      "jsx": true
+    },
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react"
+  ],
+  "rules": {}
+}
+
+3.配置vue项目
+
+npm install babel-eslint eslint-plugin-vue eslint-plugin-import -D
+
+.eslintrc
+
+{
+  root: true,
+  parserOptions: {
+    parser: 'babel-eslint'
+  },
+  env: {
+    browser: true
+  },
+  extends: [
+    "eslint:recommended",
+    'plugin:vue/essential',
+  ],
+  plugins: ['vue'],
+  rules: {}
+}
+
+命令行：
+--no-eslintrc
+禁用 .eslintrc.* 和 package.json 文件中的配置。
+-c, --config
+该选项允许你为 ESLint指定一个配置文件。
+--ext
+这个选项允许你指定 ESLint 在指定的目录下查找 JavaScript 文件时要使用的文件扩展名。默认情况下，它使用 .js 作为唯一性文件扩展名。
+eslint . --ext .js,.js2
+--fix
+修复并写入
+--ignore-path  忽略的文件
+eslint --ignore-path tmp/.eslintignore
+eslint --ignore-path .gitignore
+
+示例
+
+eslint --fix 'src/**/*.{js,tsx,jsx}' --ignore-path .gitignore
+
+
+
+
+1.prettier 安装
+npm prettier eslint -D
+
+2. 配置项目：
+
+.prettierrc
+{
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true
+}
+3.命令行
+--write
+格式化代码写入
+
+--list-different
+检查哪些代码文件需要格式化
+
+--config
+手动配置文件
+
+--ignore-path
+忽略文件
+npx prettier --ignore-path .prettierignore "src/*.js"
+
+--no-config不读取使用默认配置
+--no-editorconfig 忽略editorconfig
+
+prettier --config ./.prettierrc --write  --ignore-path .prettierignore "src/**/*.{js,ts,jsx}"
+
+1.stylelint 安装
+npm stylelint eslint -D
+
+2. 配置项目：
+
+.stylelintrc
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "indentation": "tab",
+    "number-leading-zero": null
+  }
+  "plugins": [""],//stylelint-order   stylelint-scss
+  "ignoreFiles": ["**/*.js"]
+}
+3.命令行
+--fix
+格式化代码写入
+
+
+--config
+手动配置文件
+
+stylelint --config ./.stylelintrc --fix  "src/**/*.{css,less,scss,sass}"
+
+
+4.husky +lintstage
+
+安装：
+npm install husky lint-staged -D
+
+"husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+    }
+  },
+"lint-staged": {
+    "*.{js,ts}": [
+      "prettier --config ./.prettierrc --write",
+      "eslint --fix"
+    ],
+    "*.{less,css}": [
+      "prettier --config ./.prettierrc --write",
+      "stylelint --fix"
+    ]
+  },
+
+5.commitlint
+
+安装
+npm install -D commitizen cz-conventional-changelog @commitlint/config-conventional
+
+配置
+"config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
+"commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  }
+"husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
