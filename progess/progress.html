@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body style="background-color: rgb(43, 106, 199)">
+    <canvas id="canvas" width="300" height="300"></canvas>
+  </body>
+
+  <script>
+    const trasnparentColor1 = 'rgba(255,255,255,0.1)';
+    const trasnparentColor2 = 'rgba(255,255,255,0.2)';
+    const trasnparentColor3 = 'rgba(255,255,255,0.3)';
+    const WHITE = 'rgba(255,255,255)';
+    const RED = '#f00';
+
+    draw(80, Math.PI); // 半圆PI   全圆 (1 / 2) * PI
+
+    function draw(percent, sR) {
+      if (percent < 0 || percent > 100) {
+        return;
+      }
+      if (sR < Math.PI / 2 || sR >= (3 / 2) * Math.PI) {
+        return;
+      }
+      var canvas = document.getElementById('canvas');
+      var cxt = canvas.getContext('2d');
+
+      // 渐变背景色
+      var gradient = cxt.createLinearGradient(0, 0, 170, 0);
+      gradient.addColorStop(0, trasnparentColor1);
+      gradient.addColorStop(0.3, trasnparentColor3);
+      gradient.addColorStop(1, WHITE);
+      var cW = canvas.width,
+        cH = canvas.height,
+        baseColor = trasnparentColor1,
+        coverColor = gradient,
+        PI = Math.PI,
+        sR = sR || (1 / 2) * PI;
+
+      var finalRadian = sR + ((PI + (PI - sR) * 2) * percent) / 100;
+      var step = (PI + (PI - sR) * 2) / 100;
+      var text = 0;
+
+      var timer = setInterval(function () {
+        cxt.clearRect(0, 0, cW, cH);
+        var endRadian = sR + text * step;
+        // 轨道trace
+        drawCanvas(
+          cW / 2,
+          cH / 2,
+          80,
+          sR,
+          sR + (PI + (PI - sR) * 2),
+          baseColor,
+          7
+        );
+        // 进度条 progess
+        drawCanvas(cW / 2, cH / 2, 80, sR, endRadian, coverColor, 7);
+
+        var angle = 2 * PI - endRadian,
+          xPos = Math.cos(angle) * 80 + cW / 2,
+          yPos = -Math.sin(angle) * 80 + cH / 2;
+        // 顶部透明外圆
+        drawCanvas(xPos, yPos, 6, 0, 2 * PI, trasnparentColor2, 0);
+        // 中间白色圆
+        drawCanvas(xPos, yPos, 3, 0, 2 * PI, WHITE, 0);
+        // 中心红点
+        drawCanvas(xPos, yPos, 0.5, 0, 2 * PI, RED, 2);
+        // 文本
+        cxt.fillStyle = WHITE;
+        cxt.font = '20px PT Sans';
+        var textWidth = cxt.measureText(text + '%').width;
+        cxt.fillText(text + '%', cW / 2 - textWidth / 2, cH / 2);
+        text++;
+
+        if (endRadian.toFixed(2) >= finalRadian.toFixed(2)) {
+          clearInterval(timer);
+        }
+      }, 30);
+      // 画圆函数
+      function drawCanvas(x, y, r, sRadian, eRadian, color, lineWidth) {
+        cxt.beginPath();
+        cxt.lineCap = 'round';
+        cxt.strokeStyle = color;
+        cxt.lineWidth = lineWidth;
+        cxt.arc(x, y, r, sRadian, eRadian);
+        cxt.stroke();
+      }
+    }
+  </script>
+</html>

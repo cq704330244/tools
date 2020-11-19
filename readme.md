@@ -14,6 +14,8 @@ axios 简单封装
 
 日期格式化( 时间戳->mm-dd-ss )
 
-### 代码规范校验
+### lint 代码规范校验
 
 eslint + prettier + commiitlint
+
+### progress canvas 进度条
