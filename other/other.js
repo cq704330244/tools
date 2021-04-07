@@ -23,6 +23,3 @@ function download(href, title) {
 
 const editgit = 'https://github.com/nhn/tui.editor';
 const edit = 'https://ui.toast.com/tui-editor/';
-
-// makdown2html
-// html2pdf
